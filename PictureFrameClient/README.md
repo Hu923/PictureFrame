@@ -19,6 +19,10 @@ $ npm install
 ### Usage
 
 ```
+Run storybook : $npm run storybook
+```
+
+```
 Run the Server in development mode : $ npm start
 ```
 
