@@ -9,4 +9,5 @@ export default {
 };
 
 export const Initial = () => <UploadButton onClick={action('clicked')} />;
+export const Disabled = () => <UploadButton disabled />;
 export const Uploading = () => <UploadButton uploading />;
