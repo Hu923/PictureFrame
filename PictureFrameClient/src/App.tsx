@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import UploadButton from './components/UploadButton';
 import ImageEditor from './components/ImageEditor';
+import ResultView from './components/ResultView';
 
 const App: React.FC = () => {
   const [processedImage, setProcessedImage] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
+  const [resultImage, setResultImage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const onSelectFile = (e: any) => {
     setLoading(true);
     setSelectedImage(URL.createObjectURL(e.target.files[0]));
   }
+
   const onFinishProcess = (src: any, err: any) => {
     if (err) {
       console.log(err);
@@ -21,8 +26,26 @@ const App: React.FC = () => {
     }
     setLoading(false);
   }
+
   const onProcessing = (processing: boolean) => {
     setLoading(processing);
+  }
+
+  const onUpload = () => {
+    setUploading(true);
+    setResultImage('');
+    axios.post('http://localhost:3001', {
+      base64image: processedImage
+    })
+    .then(function (response) {
+      console.log(response);
+      setUploading(false);
+      setResultImage(response.data.url);
+    })
+    .catch(function (error) {
+      console.log(error);
+      setUploading(false);
+    });
   }
 
   return (
@@ -40,7 +63,12 @@ const App: React.FC = () => {
         <Form.Group>
           <ImageEditor src={selectedImage} onFinishProcess={onFinishProcess} onProcessing={onProcessing} />
         </Form.Group>
-        <UploadButton disabled={!processedImage || loading} />
+        <Form.Group>
+        <UploadButton disabled={!processedImage || loading} uploading={uploading} onClick={onUpload} />
+        </Form.Group>
+        <Form.Group>
+          <ResultView src={resultImage} />
+        </Form.Group>
       </Form>
     </Container>
   );
