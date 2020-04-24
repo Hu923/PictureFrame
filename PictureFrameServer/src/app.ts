@@ -44,9 +44,10 @@ class App {
       this.app.use(cors({ origin: true, credentials: true }));
     }
     // sequelize.sync({ force: false });
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.json({ limit: '10mb' }));
+    this.app.use(express.urlencoded({ extended: true, limit: '10mb' }));
     this.app.use(cookieParser());
+    this.app.use(express.static('public'));
   }
 
   private initializeRoutes(routes: Routes[]) {

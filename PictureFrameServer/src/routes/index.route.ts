@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import IndexController from '../controllers/index.controller';
 import Route from '../interfaces/routes.interface';
+import { UploadDto } from '../dtos/upload.dto';
+import validationMiddleware from '../middlewares/validation.middleware';
 
 class IndexRoute implements Route {
   public path = '/';
@@ -13,6 +15,7 @@ class IndexRoute implements Route {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.indexController.index);
+    this.router.post(`${this.path}`, validationMiddleware(UploadDto), this.indexController.upload);
   }
 }
 
