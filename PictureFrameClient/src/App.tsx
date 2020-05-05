@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import UploadButton from './components/UploadButton';
 import ImageEditor from './components/ImageEditor';
 import ResultView from './components/ResultView';
+import CONFIG from './config'
 
 const App: React.FC = () => {
   const [processedImage, setProcessedImage] = useState('');
@@ -32,17 +33,20 @@ const App: React.FC = () => {
   }
 
   const onUpload = () => {
+    const API_BASE: string = CONFIG.API_BASE;
+    const PORT: number = CONFIG.PORT;
     setUploading(true);
     setResultImage('');
-    axios.post('http://localhost:3001', {
+    
+    axios.post(`${API_BASE}:${PORT}`, {
       base64image: processedImage
     })
-    .then(function (response) {
+    .then((response) => {
       console.log(response);
       setUploading(false);
       setResultImage(response.data.url);
     })
-    .catch(function (error) {
+    .catch((error) => {
       console.log(error);
       setUploading(false);
     });
