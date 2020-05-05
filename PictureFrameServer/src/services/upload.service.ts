@@ -44,7 +44,7 @@ class UploadService {
     }
 
     const createdUploadData: Upload = {
-      url: `http://localhost:3001/images/${fileName}`,
+      url: `${process.env.HOST}:${process.env.PORT}/images/${fileName}`,
     };
 
     return createdUploadData;
